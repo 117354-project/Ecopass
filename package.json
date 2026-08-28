@@ -1,0 +1,14 @@
+{
+  "name": "ecopass-cms",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EcoPass landing page with a persistent, authenticated content dashboard",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test server.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

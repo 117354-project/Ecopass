@@ -1,0 +1,38 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const root = __dirname;
+const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const html = read('app.html');
+const css = read('ecopass-ui.css');
+const app = read('ecopass-ui.js');
+const data = read('mock-data.js');
+const services = read('mock-services.js');
+
+assert.match(html, /mock-data\.js/);
+assert.match(html, /mock-services\.js/);
+assert.match(html, /ecopass-ui\.js/);
+assert.match(css, /--primary:#25671e/i);
+assert.match(css, /min-height:44px/);
+assert.match(css, /prefers-reduced-motion/);
+assert.match(css, /mobile-nav/);
+assert.match(css, /admin-side/);
+assert.match(app, /Proceed to GCash/);
+assert.match(app, /GCash only/);
+assert.doesNotMatch(app, /Maya|bank transfer|credit card/i);
+assert.match(data, /Paid — Checkpoint Verification Required/);
+assert.match(app, /No additional visitors were added/);
+assert.match(app, /Unable to Verify/);
+assert.match(app, /No successful check-in was recorded/);
+assert.match(app, /Activate this EcoPass for/);
+assert.doesNotMatch(app, /Mark as Paid/i);
+assert.match(data, /DEMO-OFFLINE/);
+assert.match(services, /simulated: true/);
+assert.match(app, /\/admin\/dashboard/);
+assert.match(app, /\/officer\/scan/);
+assert.match(app, /\/destination\/scan/);
+assert.match(app, /Visitors added/);
+assert.match(app, /tableState/);
+
+console.log('EcoPass UI contract checks passed.');

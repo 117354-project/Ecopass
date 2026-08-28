@@ -1,0 +1,4 @@
+.env
+uploads/*
+!uploads/.gitkeep
+data/site-content.json
