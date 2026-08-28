@@ -11,6 +11,7 @@ const { start, sanitizeContent } = require('./server');
 
 test('public landing page has no upload or inline editing controls', async () => {
   const html = await fs.readFile(path.join(__dirname, 'ecopass.html'), 'utf8');
+  const adminCss = await fs.readFile(path.join(__dirname, 'admin.css'), 'utf8');
   assert.doesNotMatch(html, /type=["']file["']/i);
   assert.doesNotMatch(html, /contenteditable/i);
   assert.doesNotMatch(html, /indexedDB/i);
@@ -20,6 +21,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-image="cta\.phoneImage"/);
   assert.doesNotMatch(html, /class="site-header/);
   assert.doesNotMatch(html, /class="promise-strip/);
+  assert.match(adminCss, /\[hidden\]\{display:none!important\}/);
 });
 
 test('content sanitizer keeps the schema and strips control characters', () => {
