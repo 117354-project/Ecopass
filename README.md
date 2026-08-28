@@ -5,7 +5,7 @@ This project includes a public EcoPass landing page and a real server-backed con
 ## Run it
 
 1. Copy `.env.example` to `.env`.
-2. Replace `ADMIN_PASSWORD` with a strong private password.
+2. Replace `ADMIN_PASSWORD` with a strong private password. Without it, the public site still runs but admin sign-in stays locked.
 3. Replace `SESSION_SECRET` with a long random value.
 4. Run `npm start`.
 5. Open `http://localhost:3000/` for the landing page and `http://localhost:3000/admin` for the dashboard.
@@ -22,6 +22,6 @@ The dashboard supports editing all main landing-page text, uploading/replacing i
 
 ## Production notes
 
-Run this behind HTTPS and persist both `data/` and `uploads/` on durable storage. Back up those directories. Keep `.env` private. If deploying to a serverless host, replace the filesystem storage adapter with that host's database and object storage while preserving the API contract.
+Run this behind HTTPS and persist both `data/` and `uploads/` on durable storage. Back up those directories. Keep `.env` private. On Railway, attach a Volume, mount it at `/data`, and set `STORAGE_ROOT=/data`; EcoPass will keep content in `/data/data` and uploads in `/data/uploads`. The `/health` endpoint is available for deployment health checks. If deploying to a serverless host, replace the filesystem storage adapter with that host's database and object storage while preserving the API contract.
 
 Run the automated checks with `npm test`.

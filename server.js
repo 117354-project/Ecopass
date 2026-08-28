@@ -15,9 +15,10 @@ try {
     if (match && !process.env[match[1]]) process.env[match[1]] = match[2].replace(/^(['"])(.*)\1$/, '$2');
   }
 } catch {}
-const DATA_DIR = path.join(ROOT, 'data');
+const STORAGE_ROOT = process.env.STORAGE_ROOT ? path.resolve(process.env.STORAGE_ROOT) : ROOT;
+const DATA_DIR = path.join(STORAGE_ROOT, 'data');
 const CONTENT_FILE = path.join(DATA_DIR, 'site-content.json');
-const UPLOAD_DIR = path.join(ROOT, 'uploads');
+const UPLOAD_DIR = path.join(STORAGE_ROOT, 'uploads');
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const SESSION_SECRET = process.env.SESSION_SECRET || crypto.createHash('sha256').update(`${ROOT}:ecopass-local`).digest('hex');
@@ -140,9 +141,11 @@ async function handler(req, res) {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   try {
     if (url.pathname === '/api/content' && req.method === 'GET') return json(res, 200, await readContent());
+    if (url.pathname === '/health' && req.method === 'GET') return json(res, 200, { status: 'ok', adminConfigured: Boolean(ADMIN_PASSWORD) });
     if (url.pathname === '/api/admin/session' && req.method === 'GET') return json(res, 200, { authenticated: authenticated(req) });
     if (url.pathname === '/api/admin/login' && req.method === 'POST') {
       if (!sameOrigin(req)) return json(res, 403, { error: 'Invalid request origin' });
+      if (!ADMIN_PASSWORD) return json(res, 503, { error: 'Admin access is locked until ADMIN_PASSWORD is configured on the server.' });
       if (!loginAllowed(req)) return json(res, 429, { error: 'Too many attempts. Try again later.' });
       const input = await jsonBody(req);
       if (!safeEqual(input.password, ADMIN_PASSWORD)) { recordFailure(req); return json(res, 401, { error: 'Incorrect password' }); }
@@ -185,10 +188,12 @@ async function handler(req, res) {
 }
 
 async function start(port = PORT) {
-  if (!ADMIN_PASSWORD) throw new Error('ADMIN_PASSWORD is required. Copy .env.example to .env and set a strong password.');
   await ensureStorage();
   const server = http.createServer(handler);
-  return new Promise(resolve => server.listen(port, () => resolve(server)));
+  return new Promise(resolve => server.listen(port, '0.0.0.0', () => {
+    if (!ADMIN_PASSWORD) console.warn('EcoPass admin access is locked: configure ADMIN_PASSWORD to enable dashboard sign-in.');
+    resolve(server);
+  }));
 }
 if (require.main === module) start().then(server => console.log(`EcoPass running at http://localhost:${server.address().port}`));
 module.exports = { start, sanitizeContent, readContent, writeContent };

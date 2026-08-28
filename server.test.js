@@ -37,6 +37,9 @@ test('server protects writes and persists authenticated content updates', async 
   const publicResponse = await fetch(`${base}/api/content`);
   assert.equal(publicResponse.status, 200);
   const current = await publicResponse.json();
+  const health = await (await fetch(`${base}/health`)).json();
+  assert.equal(health.status, 'ok');
+  assert.equal(health.adminConfigured, true);
 
   const denied = await fetch(`${base}/api/admin/content`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(current) });
   assert.equal(denied.status, 401);
