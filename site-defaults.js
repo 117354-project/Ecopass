@@ -9,10 +9,14 @@ module.exports = Object.freeze({
   hero: {
     eyebrow: 'SMART · SIMPLE · SUSTAINABLE',
     title: 'Explore responsibly. Travel effortlessly.',
+    titleLine1: 'Explore',
+    titleLine2: 'responsibly. Travel',
+    titleLine3: 'effortlessly.',
     description: 'Your digital pass to unforgettable destinations—faster entry, less paper, and a lighter footprint.',
     primaryButton: 'Get Your EcoPass',
     secondaryButton: 'See How It Works',
-    image: '/ecopass-restored-hero.png'
+    image: '/ecopass-hero-background.png',
+    phoneImage: '/ecopass-phone-cutout.png'
   },
   how: {
     title: 'How EcoPass works',
@@ -48,7 +52,9 @@ module.exports = Object.freeze({
   cta: {
     title: 'Ready for your next meaningful journey?',
     description: 'Get your EcoPass and explore with less waiting, less paper, and more purpose.',
-    button: 'Get Your EcoPass'
+    button: 'Get Your EcoPass',
+    backgroundImage: '/ecopass-cta-background.png',
+    phoneImage: '/ecopass-phone-cutout.png'
   },
   updatedAt: null
 });
