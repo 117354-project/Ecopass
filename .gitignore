@@ -2,3 +2,4 @@
 uploads/*
 !uploads/.gitkeep
 data/site-content.json
+data/*.tmp
