@@ -15,7 +15,7 @@ module.exports = Object.freeze({
     description: 'Your digital pass to unforgettable destinations—faster entry, less paper, and a lighter footprint.',
     primaryButton: 'Get Your EcoPass',
     secondaryButton: 'See How It Works',
-    image: '/ecopass-hero-background.png',
+    image: '/ecopass-hero-rock-background.png',
     phoneImage: '/ecopass-phone-cutout.png'
   },
   how: {

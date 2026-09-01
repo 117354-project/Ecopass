@@ -20,7 +20,8 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-image="brand\.logoImage"/);
   assert.match(html, /data-image="cta\.backgroundImage"/);
   assert.match(html, /data-image="cta\.phoneImage"/);
-  assert.match(html, /class="site-header/);
+  assert.doesNotMatch(html, /class="site-header/);
+  assert.match(html, /class="hero-logo/);
   assert.doesNotMatch(html, /class="promise-strip/);
   assert.match(adminCss, /\[hidden\]\{display:none!important\}/);
 });
