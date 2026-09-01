@@ -47,7 +47,7 @@ module.exports = Object.freeze({
   journey: {
     title: 'Designed for better journeys',
     description: 'One simple pass keeps your visit organized while supporting responsible tourism.',
-    image: 'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1200&q=85'
+    image: '/ecopass-journey-walkway-v2.png'
   },
   cta: {
     title: 'Ready for your next meaningful journey?',
