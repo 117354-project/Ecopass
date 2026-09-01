@@ -13,6 +13,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   const html = await fs.readFile(path.join(__dirname, 'ecopass.html'), 'utf8');
   const adminHtml = await fs.readFile(path.join(__dirname, 'admin.html'), 'utf8');
   const adminCss = await fs.readFile(path.join(__dirname, 'admin.css'), 'utf8');
+  const landingCss = await fs.readFile(path.join(__dirname, 'landing.css'), 'utf8');
   assert.doesNotMatch(html, /type=["']file["']/i);
   assert.doesNotMatch(html, /contenteditable/i);
   assert.doesNotMatch(html, /indexedDB/i);
@@ -48,6 +49,10 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.doesNotMatch(html, /class="site-header/);
   assert.match(html, /class="hero-logo/);
   assert.doesNotMatch(html, /class="promise-strip/);
+  assert.doesNotMatch(html, /class="sun"/);
+  assert.doesNotMatch(landingCss, /\.hero-visual:(?:before|after)/);
+  assert.doesNotMatch(landingCss, /\.sun\{/);
+  assert.match(landingCss, /\.hero-frame\{[^}]*border:0/);
   assert.match(adminCss, /\[hidden\]\{display:none!important\}/);
 });
 
