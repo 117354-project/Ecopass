@@ -15,12 +15,14 @@ module.exports = Object.freeze({
     description: 'Your digital pass to unforgettable destinations—faster entry, less paper, and a lighter footprint.',
     primaryButton: 'Get Your EcoPass',
     secondaryButton: 'See How It Works',
+    backgroundImage: '/ecopass-cream-texture.png',
     image: '/ecopass-hero-rock-background.png',
     phoneImage: '/ecopass-phone-cutout.png'
   },
   how: {
     title: 'How EcoPass works',
     description: 'From discovery to entry in three simple steps.',
+    backgroundImage: '/ecopass-cream-texture.png',
     steps: [
       { title: 'Choose a destination', description: 'Browse places, learn about entry requirements, and plan your visit.' },
       { title: 'Get your digital pass', description: 'Purchase your pass in minutes and receive it instantly on your phone.' },
@@ -38,6 +40,7 @@ module.exports = Object.freeze({
   impact: {
     title: 'Small choices. Lasting impact.',
     description: 'Every digital pass helps make tourism lighter on the places we love.',
+    backgroundImage: '/ecopass-cream-texture.png',
     stats: [
       { value: '100%', label: 'Paperless' },
       { value: 'Faster', label: 'Entry' },

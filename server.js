@@ -32,7 +32,7 @@ const MIME = {
   '.webp': 'image/webp', '.gif': 'image/gif', '.svg': 'image/svg+xml'
 };
 const IMAGE_TYPES = new Map([['image/jpeg', '.jpg'], ['image/png', '.png'], ['image/webp', '.webp'], ['image/gif', '.gif']]);
-const IMAGE_SLOTS = new Set(['brand.logoImage', 'hero.image', 'hero.phoneImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'journey.image', 'cta.backgroundImage', 'cta.phoneImage']);
+const IMAGE_SLOTS = new Set(['brand.logoImage', 'hero.backgroundImage', 'hero.image', 'hero.phoneImage', 'how.backgroundImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'impact.backgroundImage', 'journey.image', 'cta.backgroundImage', 'cta.phoneImage']);
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 function merge(base, input) {
