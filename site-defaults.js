@@ -4,14 +4,14 @@ module.exports = Object.freeze({
   brand: {
     name: 'EcoPass',
     tagline: 'Travel lighter. Leave better.',
-    contact: 'info@ecopass.ph'
+    contact: 'info@ecopass.ph',
+    logoImage: '/ecopass-logo-v2.png'
   },
   hero: {
     eyebrow: 'SMART · SIMPLE · SUSTAINABLE',
     title: 'Explore responsibly. Travel effortlessly.',
-    titleLine1: 'Explore',
-    titleLine2: 'responsibly. Travel',
-    titleLine3: 'effortlessly.',
+    titleLine1: 'Explore responsibly.',
+    titleLine2: 'Travel effortlessly.',
     description: 'Your digital pass to unforgettable destinations—faster entry, less paper, and a lighter footprint.',
     primaryButton: 'Get Your EcoPass',
     secondaryButton: 'See How It Works',
