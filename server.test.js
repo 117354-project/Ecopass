@@ -56,7 +56,8 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.doesNotMatch(html, /class="sun"/);
   assert.doesNotMatch(landingCss, /\.hero-visual:(?:before|after)/);
   assert.doesNotMatch(landingCss, /\.sun\{/);
-  assert.match(landingCss, /\.hero-frame\{[^}]*border:6px solid var\(--green\)/);
+  assert.match(landingCss, /\.hero-frame\{[^}]*border:0/);
+  assert.match(landingCss, /\.hero-background\{[^}]*object-fit:contain/);
   assert.match(landingCss, /\.cta-sun\{/);
   assert.match(landingCss, /\.cta-leaves\{/);
   assert.match(adminCss, /\[hidden\]\{display:none!important\}/);
