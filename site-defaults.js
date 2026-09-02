@@ -21,7 +21,7 @@ module.exports = Object.freeze({
       { label: 'Tourist-friendly' }
     ],
     backgroundImage: '/ecopass-cream-texture.png',
-    image: '/ecopass-hero-rock-background.png'
+    image: '/ecopass-hero-upload-transparent.png'
   },
   how: {
     title: 'How EcoPass works',
@@ -96,7 +96,8 @@ module.exports = Object.freeze({
     blogLink: 'Blog',
     supportTitle: 'Support',
     faqsLink: 'FAQs',
-    adminLink: 'Admin Dashboard',
+    contactLink: 'Contact Us',
+    helpLink: 'Help Center',
     followTitle: 'Follow',
     copyright: '© 2026 EcoPass. Travel lighter.'
   },

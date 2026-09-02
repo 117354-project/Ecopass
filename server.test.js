@@ -40,6 +40,8 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-content="stories\.items\.0\.quote"/);
   assert.match(html, /data-content="cta\.secondaryButton"/);
   assert.match(html, /data-content="footer\.copyright"/);
+  assert.match(html, /data-content="footer\.contactLink"/);
+  assert.match(html, /data-content="footer\.helpLink"/);
   assert.match(html, /data-image="stories\.items\.0\.avatarImage"/);
   assert.match(html, /data-image="cta\.leavesImage"/);
   assert.match(adminHtml, /data-field="hero\.benefits\.0\.label"/);
@@ -47,6 +49,8 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(adminHtml, /id="journeyFeaturesEditor"/);
   assert.match(adminHtml, /id="storiesEditor"/);
   assert.match(adminHtml, /data-slot="cta\.leavesImage"/);
+  assert.match(adminHtml, /data-field="footer\.contactLink"/);
+  assert.match(adminHtml, /data-field="footer\.helpLink"/);
   assert.match(html, /data-image="brand\.logoImage"/);
   assert.match(html, /data-image="cta\.backgroundImage"/);
   assert.match(html, /data-image="cta\.phoneImage"/);
@@ -67,6 +71,7 @@ test('content sanitizer keeps the schema and strips control characters', () => {
   const content = sanitizeContent({ hero: { title: 'Hello\u0000 world', steps: 'ignored' }, unknown: 'discarded' });
   assert.equal(content.hero.title, 'Hello world');
   assert.equal(content.hero.phoneImage, undefined);
+  assert.equal(content.hero.image, '/ecopass-hero-upload-transparent.png');
   assert.equal(content.unknown, undefined);
   assert.equal(content.brand.name, 'EcoPass');
 });
