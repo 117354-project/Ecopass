@@ -1,4 +1,15 @@
 'use strict';
 const getPath=(object,path)=>{const normalized=path.replace(/^destinations\.(\d+)\./,'destinations.items.$1.');return normalized.split('.').reduce((value,key)=>value?.[Number.isInteger(Number(key))?Number(key):key],object)};
 async function loadContent(){if(location.protocol==='file:')return;try{const response=await fetch('/api/content',{headers:{Accept:'application/json'}});if(!response.ok)throw new Error();const content=await response.json();document.querySelectorAll('[data-content]').forEach(element=>{const value=getPath(content,element.dataset.content);if(typeof value==='string')element.textContent=value});document.querySelectorAll('[data-image]').forEach(image=>{const value=getPath(content,image.dataset.image);if(typeof value==='string'&&value)image.src=value});document.querySelectorAll('[data-contact]').forEach(contact=>contact.href=`mailto:${content.brand.contact}`);const cta=document.querySelector('[data-cta]');if(cta)cta.href=`mailto:${content.brand.contact}?subject=${encodeURIComponent('EcoPass registration')}`;document.title=`${content.brand.name} — Sipalay City`}catch{const status=document.querySelector('.page-status');status.textContent='Live content is temporarily unavailable. Showing the latest built-in version.';status.hidden=false}}
+const howModal=document.querySelector('#how-modal');
+const howModalClose=howModal?.querySelector('.how-modal-close');
+let howModalTrigger=null;
+function closeHowModal(){if(!howModal)return;if(typeof howModal.close==='function'&&howModal.open)howModal.close();else howModal.removeAttribute('open')}
+function openHowModal(trigger){if(!howModal)return;howModalTrigger=trigger||document.activeElement;if(typeof howModal.showModal==='function'){if(!howModal.open)howModal.showModal()}else howModal.setAttribute('open','');document.body.classList.add('modal-open')}
+document.querySelectorAll('[data-how-modal-open]').forEach(trigger=>trigger.addEventListener('click',event=>{event.preventDefault();openHowModal(trigger)}));
+howModalClose?.addEventListener('click',closeHowModal);
+howModal?.addEventListener('click',event=>{if(event.target===howModal)closeHowModal()});
+howModal?.addEventListener('close',()=>{document.body.classList.remove('modal-open');howModalTrigger?.focus();howModalTrigger=null});
+howModal?.addEventListener('cancel',()=>document.body.classList.remove('modal-open'));
+if(location.hash==='#how-modal')openHowModal();
 const menu=document.querySelector('.menu-button');menu?.addEventListener('click',()=>{const expanded=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-expanded',String(!expanded));document.querySelector('.nav').classList.toggle('open',!expanded)});document.querySelectorAll('.nav a').forEach(link=>link.addEventListener('click',()=>{menu?.setAttribute('aria-expanded','false');document.querySelector('.nav').classList.remove('open')}));loadContent();

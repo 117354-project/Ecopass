@@ -23,6 +23,8 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-image="how\.backgroundImage"/);
   assert.match(html, /data-image="how\.phoneImage"/);
   assert.doesNotMatch(html, /data-image="how\.leavesImage"/);
+  assert.match(html, /<dialog class="how-modal" id="how-modal"/);
+  assert.doesNotMatch(html, /<section[^>]+id="how"/);
   assert.match(html, /data-image="impact\.backgroundImage"/);
   assert.match(html, /data-image="impact\.emblemImage"/);
   assert.match(html, /data-image="impact\.leavesImage"/);
