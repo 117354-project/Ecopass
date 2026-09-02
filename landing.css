@@ -89,20 +89,20 @@ a{color:inherit}
 .destination-card .location{color:#28553b;font-weight:700}
 .destination-card a{color:var(--green);text-decoration:none;font-size:12px;font-weight:800}
 
-.impact{position:relative;left:50%;width:100vw;min-height:clamp(225px,15.5vw,297px);margin-left:-50vw;overflow:hidden;padding:clamp(38px,3.3vw,64px) 0 clamp(27px,2.1vw,40px);background-color:#005631;background-image:repeating-radial-gradient(ellipse at 82% 4%,transparent 0 42px,rgba(255,255,255,.025) 43px 44px,transparent 45px 62px),linear-gradient(120deg,#005b35,#004d2d);color:#fff}
+.impact{position:relative;width:100%;min-height:clamp(225px,15.5vw,297px);margin:0;overflow:hidden;padding:clamp(38px,3.3vw,64px) 0 clamp(27px,2.1vw,40px);background-color:#005631;background-image:repeating-radial-gradient(ellipse at 82% 4%,transparent 0 42px,rgba(255,255,255,.025) 43px 44px,transparent 45px 62px),linear-gradient(120deg,#005b35,#004d2d);color:#fff}
 .impact:before,.impact:after{content:"";position:absolute;z-index:4;left:-3%;width:106%;height:24px;pointer-events:none}
 .impact:before{top:-17px;border-radius:0 0 50% 50%/0 0 100% 100%;background:#fff}
 .impact:after{bottom:-17px;border-radius:50% 50% 0 0/100% 100% 0 0;background:var(--cream)}
-.impact-background{position:absolute;z-index:0;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);max-width:none;object-fit:cover;object-position:center;opacity:.82;filter:saturate(.9) contrast(1.04);pointer-events:none}
+.impact-background{position:absolute;z-index:0;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);max-width:none;object-fit:cover;object-position:center;opacity:.82;transform:scale(1.035);filter:saturate(.9) contrast(1.04);pointer-events:none}
 .impact-leaves{position:absolute;z-index:1;width:270px;max-width:none;opacity:.19;filter:brightness(.34) saturate(1.1);pointer-events:none}
 .impact-leaves-left{bottom:-91px;left:-63px;transform:rotate(15deg)}
 .impact-leaves-right{right:-57px;bottom:-84px;transform:scaleX(-1) rotate(14deg)}
-.impact-grid{position:relative;z-index:2;display:grid;width:min(1285px,calc(798px + (100vw - 1152px)*.64),calc(100% - 48px));max-width:none;grid-template-columns:minmax(220px,28%) minmax(0,1fr);gap:32px;align-items:center;margin-inline:auto}
+.impact-grid{position:relative;z-index:2;display:grid;width:min(1285px,calc(798px + (100vw - 1152px)*.64),calc(100% - 48px));max-width:none;grid-template-columns:minmax(220px,28%) minmax(0,1fr);gap:38px;align-items:center;margin-inline:auto}
 .impact-art{display:grid;height:clamp(160px,10.5vw,202px);place-items:center start}
 .impact-art img{width:clamp(175px,11.5vw,220px);height:clamp(160px,10.5vw,202px);object-fit:contain}
-.impact-copy{min-width:0;transform:translateY(-9px)}.impact h2{margin-bottom:5px;color:#fff;font-size:clamp(27px,2.3vw,36px);line-height:1.05}.impact-copy>p{color:#f0f7f3;font-size:12px;line-height:1.4}
-.stats{display:grid;grid-template-columns:.9fr 1fr 1.08fr;margin-top:22px}
-.stats div{position:relative;display:grid;min-width:0;grid-template-columns:37px 1fr;align-items:start;padding:0 15px;border-left:1px solid rgba(255,255,255,.3)}
+.impact-copy{display:flex;min-width:0;flex-direction:column;justify-content:center}.impact h2{margin-bottom:5px;color:#fff;font-size:clamp(27px,2.3vw,36px);line-height:1.05}.impact-copy>p{margin-bottom:0;color:#f0f7f3;font-size:12px;line-height:1.4}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:24px}
+.stats div{position:relative;display:grid;min-width:0;grid-template-columns:40px minmax(0,1fr);align-items:start;padding:0 22px;border-left:1px solid rgba(255,255,255,.3)}
 .stats div:first-child{padding-left:0;border-left:0}
 .stats i{display:block;grid-row:1/4;width:29px;height:30px;color:#fff;font-style:normal}.stats i svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .stats strong{display:block;color:#fff;font-family:"Outfit";font-size:clamp(22px,1.45vw,28px);line-height:.95}.stats span{margin-top:2px;font-size:clamp(14px,.94vw,18px);font-weight:700;line-height:1}.stats small{margin-top:9px;color:#e0eee6;font-size:clamp(9px,.63vw,12px);line-height:1.45}
