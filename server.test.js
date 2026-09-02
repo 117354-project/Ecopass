@@ -18,7 +18,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.doesNotMatch(html, /contenteditable/i);
   assert.doesNotMatch(html, /indexedDB/i);
   assert.match(html, /data-content="hero\.titleLine1"/);
-  assert.match(html, /data-image="hero\.phoneImage"/);
+  assert.doesNotMatch(html, /data-image="hero\.phoneImage"/);
   assert.match(html, /data-image="hero\.backgroundImage"/);
   assert.match(html, /data-image="how\.backgroundImage"/);
   assert.match(html, /data-image="how\.phoneImage"/);
@@ -27,6 +27,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-image="impact\.emblemImage"/);
   assert.match(html, /data-image="impact\.leavesImage"/);
   assert.match(adminHtml, /data-slot="hero\.backgroundImage"/);
+  assert.doesNotMatch(adminHtml, /data-slot="hero\.phoneImage"/);
   assert.match(adminHtml, /data-slot="how\.backgroundImage"/);
   assert.match(adminHtml, /data-slot="how\.phoneImage"/);
   assert.match(adminHtml, /data-slot="how\.leavesImage"/);
@@ -64,6 +65,7 @@ test('public landing page has no upload or inline editing controls', async () =>
 test('content sanitizer keeps the schema and strips control characters', () => {
   const content = sanitizeContent({ hero: { title: 'Hello\u0000 world', steps: 'ignored' }, unknown: 'discarded' });
   assert.equal(content.hero.title, 'Hello world');
+  assert.equal(content.hero.phoneImage, undefined);
   assert.equal(content.unknown, undefined);
   assert.equal(content.brand.name, 'EcoPass');
 });

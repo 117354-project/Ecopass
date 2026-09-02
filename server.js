@@ -32,7 +32,7 @@ const MIME = {
   '.webp': 'image/webp', '.gif': 'image/gif', '.svg': 'image/svg+xml'
 };
 const IMAGE_TYPES = new Map([['image/jpeg', '.jpg'], ['image/png', '.png'], ['image/webp', '.webp'], ['image/gif', '.gif']]);
-const IMAGE_SLOTS = new Set(['brand.logoImage', 'hero.backgroundImage', 'hero.image', 'hero.phoneImage', 'how.backgroundImage', 'how.phoneImage', 'how.leavesImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'impact.backgroundImage', 'impact.emblemImage', 'impact.leavesImage', 'journey.image', 'stories.items.0.avatarImage', 'stories.items.1.avatarImage', 'stories.items.2.avatarImage', 'cta.backgroundImage', 'cta.phoneImage', 'cta.leavesImage']);
+const IMAGE_SLOTS = new Set(['brand.logoImage', 'hero.backgroundImage', 'hero.image', 'how.backgroundImage', 'how.phoneImage', 'how.leavesImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'impact.backgroundImage', 'impact.emblemImage', 'impact.leavesImage', 'journey.image', 'stories.items.0.avatarImage', 'stories.items.1.avatarImage', 'stories.items.2.avatarImage', 'cta.backgroundImage', 'cta.phoneImage', 'cta.leavesImage']);
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 function merge(base, input) {

@@ -21,8 +21,7 @@ module.exports = Object.freeze({
       { label: 'Tourist-friendly' }
     ],
     backgroundImage: '/ecopass-cream-texture.png',
-    image: '/ecopass-hero-rock-background.png',
-    phoneImage: '/ecopass-phone-cutout.png'
+    image: '/ecopass-hero-rock-background.png'
   },
   how: {
     title: 'How EcoPass works',
