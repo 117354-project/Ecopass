@@ -39,10 +39,13 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-content="stories\.items\.0\.quote"/);
   assert.match(html, /data-content="cta\.secondaryButton"/);
   assert.match(html, /data-content="footer\.copyright"/);
+  assert.match(html, /data-image="stories\.items\.0\.avatarImage"/);
+  assert.match(html, /data-image="cta\.leavesImage"/);
   assert.match(adminHtml, /data-field="hero\.benefits\.0\.label"/);
   assert.match(adminHtml, /id="impactStatsEditor"/);
   assert.match(adminHtml, /id="journeyFeaturesEditor"/);
   assert.match(adminHtml, /id="storiesEditor"/);
+  assert.match(adminHtml, /data-slot="cta\.leavesImage"/);
   assert.match(html, /data-image="brand\.logoImage"/);
   assert.match(html, /data-image="cta\.backgroundImage"/);
   assert.match(html, /data-image="cta\.phoneImage"/);
@@ -52,7 +55,9 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.doesNotMatch(html, /class="sun"/);
   assert.doesNotMatch(landingCss, /\.hero-visual:(?:before|after)/);
   assert.doesNotMatch(landingCss, /\.sun\{/);
-  assert.match(landingCss, /\.hero-frame\{[^}]*border:0/);
+  assert.match(landingCss, /\.hero-frame\{[^}]*border:6px solid var\(--green\)/);
+  assert.match(landingCss, /\.cta-sun\{/);
+  assert.match(landingCss, /\.cta-leaves\{/);
   assert.match(adminCss, /\[hidden\]\{display:none!important\}/);
 });
 
@@ -105,6 +110,14 @@ test('server protects writes and persists authenticated content updates', async 
   const emblemRemoval = await fetch(`${base}/api/admin/image?slot=impact.emblemImage`, { method: 'DELETE', headers: { Cookie: cookie } });
   assert.equal(emblemRemoval.status, 200);
   assert.equal((await emblemRemoval.json()).url, '/ecopass-impact-emblem.png');
+  const avatarUpload = await fetch(`${base}/api/admin/upload?slot=stories.items.0.avatarImage`, { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: cookie }, body: tinyPng });
+  assert.equal(avatarUpload.status, 201);
+  const uploadedAvatar = await avatarUpload.json();
+  assert.match(uploadedAvatar.url, /^\/uploads\/stories-items-0-avatarImage-/);
+  assert.equal((await (await fetch(`${base}/api/content`)).json()).stories.items[0].avatarImage, uploadedAvatar.url);
+  const avatarRemoval = await fetch(`${base}/api/admin/image?slot=stories.items.0.avatarImage`, { method: 'DELETE', headers: { Cookie: cookie } });
+  assert.equal(avatarRemoval.status, 200);
+  assert.match((await avatarRemoval.json()).url, /^https:\/\/images\.unsplash\.com\//);
   current.hero.title = 'Persisted integration test title';
   current.stories.items[0].quote = 'Persisted integration test story';
   const saved = await fetch(`${base}/api/admin/content`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Cookie: cookie }, body: JSON.stringify(current) });

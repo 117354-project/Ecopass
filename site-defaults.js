@@ -48,7 +48,7 @@ module.exports = Object.freeze({
   impact: {
     title: 'Small choices. Lasting impact.',
     description: 'Every digital pass helps make tourism lighter on the places we love.',
-    backgroundImage: '/ecopass-cream-texture.png',
+    backgroundImage: '/ecopass-green-contour-background.png',
     emblemImage: '/ecopass-impact-emblem.png',
     leavesImage: '/ecopass-how-leaves-reference.png',
     stats: [
@@ -72,9 +72,9 @@ module.exports = Object.freeze({
   stories: {
     title: 'Travel stories that inspire',
     items: [
-      { rating: '★★★★★', quote: '“EcoPass made our trip so smooth. No long lines, just stunning views and amazing locals.”', initials: 'MR', name: 'Maya R.', location: 'Manila, Philippines' },
-      { rating: '★★★★★', quote: '“I love that my visit helps support local communities. EcoPass is travel with purpose.”', initials: 'JL', name: 'James L.', location: 'Sydney, Australia' },
-      { rating: '★★★★★', quote: '“From buying to entry, everything was effortless. Highly recommended for responsible travelers!”', initials: 'PK', name: 'Priya K.', location: 'Singapore' }
+      { rating: '★★★★★', quote: '“EcoPass made our trip so smooth. No long lines, just stunning views and amazing locals.”', initials: 'MR', name: 'Maya R.', location: 'Manila, Philippines', avatarImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=85' },
+      { rating: '★★★★★', quote: '“I love that my visit helps support local communities. EcoPass is travel with purpose.”', initials: 'JL', name: 'James L.', location: 'Sydney, Australia', avatarImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=85' },
+      { rating: '★★★★★', quote: '“From buying to entry, everything was effortless. Highly recommended for responsible travelers!”', initials: 'PK', name: 'Priya K.', location: 'Singapore', avatarImage: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=160&q=85' }
     ]
   },
   cta: {
@@ -82,8 +82,9 @@ module.exports = Object.freeze({
     description: 'Get your EcoPass and explore with less waiting, less paper, and more purpose.',
     button: 'Get Your EcoPass',
     secondaryButton: 'Browse Destinations',
-    backgroundImage: '/ecopass-cta-background.png',
-    phoneImage: '/ecopass-phone-cutout.png'
+    backgroundImage: '/ecopass-green-contour-background.png',
+    phoneImage: '/ecopass-phone-cutout.png',
+    leavesImage: '/ecopass-how-leaves-reference.png'
   },
   footer: {
     exploreTitle: 'Explore',
