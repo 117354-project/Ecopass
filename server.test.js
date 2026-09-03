@@ -14,6 +14,7 @@ test('public landing page has no inline editing controls and only the required v
   const adminHtml = await fs.readFile(path.join(__dirname, 'admin.html'), 'utf8');
   const adminCss = await fs.readFile(path.join(__dirname, 'admin.css'), 'utf8');
   const landingCss = await fs.readFile(path.join(__dirname, 'landing.css'), 'utf8');
+  const landingJs = await fs.readFile(path.join(__dirname, 'landing.js'), 'utf8');
   assert.equal((html.match(/type=["']file["']/gi) || []).length, 1);
   assert.match(html, /name="discountId"[^>]+type="file"/);
   assert.doesNotMatch(html, /contenteditable/i);
@@ -33,6 +34,11 @@ test('public landing page has no inline editing controls and only the required v
   assert.match(html, /data-content="registration\.groupTitle"/);
   assert.match(html, /data-content="registration\.paymentMethods\.4"/);
   assert.match(html, /data-download-pass/);
+  assert.match(html, /property="og:image" content="https:\/\/ecopass-production\.up\.railway\.app\/ecopass-social-card\.png"/);
+  assert.match(html, /name="twitter:card" content="summary_large_image"/);
+  assert.match(landingJs, /link\.download=`EcoPass-\$\{currentPass\.id\}\.png`/);
+  assert.match(landingJs, /toBlob\(resolve,'image\/png'/);
+  assert.doesNotMatch(landingJs, /EcoPass-\$\{currentPass\.id\}\.html|text\/html/);
   assert.doesNotMatch(html, /Hotel Accommodation|Booked Rooms|Mode of Travel|Round Trip/);
   assert.doesNotMatch(html, /<section[^>]+id="how"/);
   assert.match(html, /data-image="impact\.backgroundImage"/);
