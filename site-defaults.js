@@ -5,7 +5,8 @@ module.exports = Object.freeze({
     name: 'EcoPass',
     tagline: 'Travel lighter. Leave better.',
     contact: 'info@ecopass.ph',
-    logoImage: '/ecopass-logo-v2.png'
+    logoImage: '/ecopass-logo-v2.png',
+    faviconImage: '/ecopass-logo-v2.png'
   },
   hero: {
     eyebrow: 'SMART · SIMPLE · SUSTAINABLE',

@@ -18,6 +18,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.doesNotMatch(html, /contenteditable/i);
   assert.doesNotMatch(html, /indexedDB/i);
   assert.match(html, /data-content="hero\.titleLine1"/);
+  assert.match(html, /data-favicon/);
   assert.doesNotMatch(html, /data-image="hero\.phoneImage"/);
   assert.match(html, /data-image="hero\.backgroundImage"/);
   assert.match(html, /data-image="how\.backgroundImage"/);
@@ -29,6 +30,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-image="impact\.emblemImage"/);
   assert.match(html, /data-image="impact\.leavesImage"/);
   assert.match(adminHtml, /data-slot="hero\.backgroundImage"/);
+  assert.match(adminHtml, /data-slot="brand\.faviconImage"/);
   assert.doesNotMatch(adminHtml, /data-slot="hero\.phoneImage"/);
   assert.match(adminHtml, /data-slot="how\.backgroundImage"/);
   assert.match(adminHtml, /data-slot="how\.phoneImage"/);
@@ -112,6 +114,14 @@ test('server protects writes and persists authenticated content updates', async 
   const backgroundRemoval = await fetch(`${base}/api/admin/image?slot=how.backgroundImage`, { method: 'DELETE', headers: { Cookie: cookie } });
   assert.equal(backgroundRemoval.status, 200);
   assert.equal((await backgroundRemoval.json()).url, '/ecopass-cream-texture.png');
+  const faviconUpload = await fetch(`${base}/api/admin/upload?slot=brand.faviconImage`, { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: cookie }, body: tinyPng });
+  assert.equal(faviconUpload.status, 201);
+  const uploadedFavicon = await faviconUpload.json();
+  assert.match(uploadedFavicon.url, /^\/uploads\/brand-faviconImage-/);
+  assert.equal((await (await fetch(`${base}/api/content`)).json()).brand.faviconImage, uploadedFavicon.url);
+  const faviconRemoval = await fetch(`${base}/api/admin/image?slot=brand.faviconImage`, { method: 'DELETE', headers: { Cookie: cookie } });
+  assert.equal(faviconRemoval.status, 200);
+  assert.equal((await faviconRemoval.json()).url, '/ecopass-logo-v2.png');
   const emblemUpload = await fetch(`${base}/api/admin/upload?slot=impact.emblemImage`, { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: cookie }, body: tinyPng });
   assert.equal(emblemUpload.status, 201);
   const uploadedEmblem = await emblemUpload.json();
