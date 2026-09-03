@@ -77,6 +77,21 @@ module.exports = Object.freeze({
       { rating: '★★★★★', quote: '“From buying to entry, everything was effortless. Highly recommended for responsible travelers!”', initials: 'PK', name: 'Priya K.', location: 'Singapore', avatarImage: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=160&q=85' }
     ]
   },
+  support: {
+    title: 'Support',
+    description: 'For inquiries or assistance with EcoPass, reach us through the contact options below.',
+    email: 'info@ecopass.ph',
+    emailUrl: 'mailto:info@ecopass.ph',
+    phone: 'Phone support coming soon',
+    phoneUrl: '#support',
+    facebookLabel: 'Facebook Page',
+    facebookUrl: 'https://www.facebook.com/',
+    messengerLabel: 'Message Us',
+    messengerUrl: 'https://www.messenger.com/',
+    address: 'Sipalay City, Negros Occidental, Philippines',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Sipalay+City%2C+Negros+Occidental%2C+Philippines',
+    mapEmbedUrl: 'https://www.google.com/maps?q=Sipalay+City%2C+Negros+Occidental%2C+Philippines&output=embed'
+  },
   cta: {
     title: 'Ready for your next meaningful journey?',
     description: 'Get your EcoPass and explore with less waiting, less paper, and more purpose.',
@@ -95,6 +110,7 @@ module.exports = Object.freeze({
     getPassLink: 'Get Your Pass',
     benefitsLink: 'Benefits',
     blogLink: 'Blog',
+    supportPageLink: 'Support',
     supportTitle: 'Support',
     faqsLink: 'FAQs',
     contactLink: 'Contact Us',
