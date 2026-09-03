@@ -9,12 +9,13 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { start, sanitizeContent } = require('./server');
 
-test('public landing page has no upload or inline editing controls', async () => {
+test('public landing page has no inline editing controls and only the required visitor ID upload', async () => {
   const html = await fs.readFile(path.join(__dirname, 'ecopass.html'), 'utf8');
   const adminHtml = await fs.readFile(path.join(__dirname, 'admin.html'), 'utf8');
   const adminCss = await fs.readFile(path.join(__dirname, 'admin.css'), 'utf8');
   const landingCss = await fs.readFile(path.join(__dirname, 'landing.css'), 'utf8');
-  assert.doesNotMatch(html, /type=["']file["']/i);
+  assert.equal((html.match(/type=["']file["']/gi) || []).length, 1);
+  assert.match(html, /name="discountId"[^>]+type="file"/);
   assert.doesNotMatch(html, /contenteditable/i);
   assert.doesNotMatch(html, /indexedDB/i);
   assert.match(html, /data-content="hero\.titleLine1"/);
@@ -27,11 +28,11 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /<dialog class="how-modal" id="how-modal"/);
   assert.match(html, /<dialog class="pass-modal" id="pass-modal"/);
   assert.match(html, /data-pass-modal-open/);
-  assert.match(html, /data-content="registration\.guestLabel"/);
-  assert.match(html, /data-content="registration\.arrivalLabel"/);
-  assert.match(html, /data-content="registration\.departureLabel"/);
-  assert.match(html, /data-content="registration\.purposeLabel"/);
-  assert.match(html, /data-content="registration\.emailLabel"/);
+  assert.match(html, /data-content="registration\.fullNameLabel"/);
+  assert.match(html, /data-content="registration\.visitDateLabel"/);
+  assert.match(html, /data-content="registration\.groupTitle"/);
+  assert.match(html, /data-content="registration\.paymentMethods\.4"/);
+  assert.match(html, /data-download-pass/);
   assert.doesNotMatch(html, /Hotel Accommodation|Booked Rooms|Mode of Travel|Round Trip/);
   assert.doesNotMatch(html, /<section[^>]+id="how"/);
   assert.match(html, /data-image="impact\.backgroundImage"/);
@@ -65,7 +66,7 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(adminHtml, /data-field="support\.address"/);
   assert.match(adminHtml, /data-field="support\.mapEmbedUrl"/);
   assert.match(adminHtml, /data-field="registration\.title"/);
-  assert.match(adminHtml, /data-field="registration\.purposes\.3"/);
+  assert.match(adminHtml, /data-field="registration\.paymentMethods\.4"/);
   assert.match(adminHtml, /data-slot="cta\.leavesImage"/);
   assert.match(adminHtml, /data-field="footer\.contactLink"/);
   assert.match(adminHtml, /data-field="footer\.helpLink"/);

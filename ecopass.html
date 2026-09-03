@@ -108,17 +108,49 @@
   <dialog class="pass-modal" id="pass-modal" aria-labelledby="pass-modal-title">
     <div class="pass-modal-card">
       <button class="pass-modal-close" type="button" aria-label="Close tour details modal"><span aria-hidden="true">×</span></button>
-      <div class="pass-modal-header">
-        <span class="pass-modal-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="38" cy="14" r="7"/><path d="m33 23 10 8 9-5M35 25l-8 13-12-4M27 38l-8 14M34 35l10 17M13 50h13"/><path d="m15 19 8 7-7 10-9-6 8-11Z"/></svg></span>
-        <div><span class="pass-modal-eyebrow" data-content="registration.eyebrow">PLAN YOUR VISIT</span><h2 id="pass-modal-title" data-content="registration.title">Submit Tour Details</h2><p data-content="registration.description">Tell us the essentials for your EcoPass request. We will use these details to help prepare your visit.</p></div>
-      </div>
-      <form class="pass-form" id="passForm">
-        <label class="pass-field"><span data-content="registration.guestLabel">Number of Guests</span><select name="guests" required><option value="1">1 Guest</option><option value="2">2 Guests</option><option value="3">3 Guests</option><option value="4">4 Guests</option><option value="5">5 Guests</option><option value="6">6 Guests</option><option value="7">7 Guests</option><option value="8">8 Guests</option><option value="9">9 Guests</option><option value="10">10 Guests</option></select></label>
-        <fieldset class="pass-schedule"><legend data-content="registration.scheduleLabel">Tour Schedule</legend><label><span data-content="registration.arrivalLabel">Arrival Date</span><input name="arrival" type="date" required></label><label><span data-content="registration.departureLabel">Departure Date</span><input name="departure" type="date" required></label></fieldset>
-        <label class="pass-field"><span data-content="registration.purposeLabel">Purpose of Travel</span><select name="purpose" required><option value="" selected disabled data-content="registration.purposePlaceholder">Select a purpose</option><option data-content="registration.purposes.0">Leisure and vacation</option><option data-content="registration.purposes.1">Business travel</option><option data-content="registration.purposes.2">Visiting family or friends</option><option data-content="registration.purposes.3">Educational or cultural visit</option></select></label>
-        <label class="pass-field pass-email"><span data-content="registration.emailLabel">Valid Email Address</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com" required><small data-content="registration.emailNote">Your email address will be used to send confirmation and pass instructions.</small></label>
-        <p class="pass-form-status" id="passFormStatus" role="status" aria-live="polite"></p>
-        <div class="pass-form-actions"><button class="button pass-cancel" type="button" data-content="registration.cancelButton">Cancel</button><button class="button button-gold" type="submit" data-content="registration.submitButton">Submit Details</button></div>
+      <div class="pass-progress" aria-label="Registration progress"><span class="active" data-pass-progress="1">1</span><i></i><span data-pass-progress="2">2</span><i></i><span data-pass-progress="3">3</span></div>
+      <form class="registration-form" id="passForm">
+        <section class="pass-step registration-step" data-pass-step="1">
+          <div class="registration-heading"><span class="registration-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="38" cy="14" r="7"/><path d="m33 23 10 8 9-5M35 25l-8 13-12-4M27 38l-8 14M34 35l10 17M13 50h13"/><path d="m15 19 8 7-7 10-9-6 8-11Z"/></svg></span><div><h2 id="pass-modal-title" data-content="registration.title">Tourist Registration</h2><p data-content="registration.description">Ordinance-required visitor details</p></div></div>
+          <div class="registration-grid">
+            <label class="registration-field wide"><span data-content="registration.fullNameLabel">Full Name</span><input name="fullName" autocomplete="name" placeholder="Juan Dela Cruz" required></label>
+            <label class="registration-field wide"><span data-content="registration.addressLabel">Address</span><input name="address" autocomplete="street-address" placeholder="Purok, Barangay, City" required></label>
+            <label class="registration-field"><span data-content="registration.contactLabel">Contact Number</span><input name="contact" type="tel" autocomplete="tel" placeholder="0917 123 4567" required></label>
+            <label class="registration-field"><span data-content="registration.visitDateLabel">Date of Visit</span><input name="visitDate" type="date" required></label>
+            <label class="registration-field wide"><span data-content="registration.stayLabel">Length of Stay</span><select name="stay" required><option value="1D / 0N">1D / 0N</option><option value="2D / 1N">2D / 1N</option><option value="3D / 2N" selected>3D / 2N</option><option value="4D / 3N">4D / 3N</option><option value="5D / 4N">5D / 4N</option><option value="6D / 5N">6D / 5N</option><option value="7D / 6N">7D / 6N</option></select></label>
+          </div>
+          <fieldset class="group-composition"><legend data-content="registration.groupTitle">Group Composition</legend>
+            <div class="group-row" data-group="adult" data-rate="50"><div><strong data-content="registration.adultLabel">Adult (Local)</strong><small>Local visitor · ₱50 per person</small></div><div class="counter"><button type="button" data-count-action="minus" aria-label="Remove adult">−</button><output>1</output><button type="button" data-count-action="plus" aria-label="Add adult">+</button></div></div>
+            <div class="group-row" data-group="foreign" data-rate="100"><div><strong data-content="registration.foreignLabel">Foreign Visitor</strong><small>Non-local visitor · ₱100 per person</small></div><div class="counter"><button type="button" data-count-action="minus" aria-label="Remove foreign visitor">−</button><output>0</output><button type="button" data-count-action="plus" aria-label="Add foreign visitor">+</button></div></div>
+            <div class="group-row" data-group="senior" data-rate="25"><div><strong data-content="registration.seniorLabel">Senior / PWD / Student</strong><small>50% discounted rate · ₱25 per person</small></div><div class="counter"><button type="button" data-count-action="minus" aria-label="Remove discounted visitor">−</button><output>0</output><button type="button" data-count-action="plus" aria-label="Add discounted visitor">+</button></div></div>
+            <div class="group-row" data-group="child" data-rate="0"><div><strong data-content="registration.childLabel">Children below 8</strong><small>Exempted · free entry</small></div><div class="counter"><button type="button" data-count-action="minus" aria-label="Remove child">−</button><output>0</output><button type="button" data-count-action="plus" aria-label="Add child">+</button></div></div>
+          </fieldset>
+          <label class="id-upload" id="idUploadField"><span>✓</span><strong data-content="registration.idLabel">Upload a valid ID for each discounted visitor</strong><input name="discountId" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><small id="idFileName">No file selected</small></label>
+          <p class="registration-note"><span aria-hidden="true">⚠</span><span data-content="registration.idNote">A valid ID is required for every senior, PWD, or student claiming the discounted rate.</span></p>
+          <p class="pass-form-status" data-pass-status="1" role="alert"></p>
+          <div class="registration-actions end"><button class="button button-gold" type="submit" data-content="registration.continueButton">Continue to Payment</button></div>
+        </section>
+        <section class="pass-step payment-step" data-pass-step="2" hidden>
+          <div class="registration-heading compact-heading"><span class="registration-icon payment-icon" aria-hidden="true">₱</span><div><h2 data-content="registration.paymentTitle">Payment</h2><p data-content="registration.paymentDescription">Environmental User Fee (EUF)</p></div></div>
+          <div class="payment-summary" id="paymentSummary"></div>
+          <h3 data-content="registration.paymentMethodTitle">Select Payment Method</h3>
+          <div class="payment-methods">
+            <label><span class="payment-badge gcash">G</span><span data-content="registration.paymentMethods.0">GCash</span><input type="radio" name="paymentMethod" value="GCash" checked></label>
+            <label><span class="payment-badge maya">M</span><span data-content="registration.paymentMethods.1">Maya</span><input type="radio" name="paymentMethod" value="Maya"></label>
+            <label><span class="payment-badge bank">▥</span><span data-content="registration.paymentMethods.2">Bank Transfer</span><input type="radio" name="paymentMethod" value="Bank Transfer"></label>
+            <label><span class="payment-badge cash">₱</span><span data-content="registration.paymentMethods.3">Pay at Tourism Office (Cash)</span><input type="radio" name="paymentMethod" value="Pay at Tourism Office (Cash)"></label>
+            <label><span class="payment-badge physical">▣</span><span data-content="registration.paymentMethods.4">Physical Payment</span><input type="radio" name="paymentMethod" value="Physical Payment"></label>
+          </div>
+          <p class="payment-notice" data-content="registration.paymentNotice">Your selected payment method will be recorded. No charge is made on this demonstration site.</p>
+          <div class="registration-actions"><button class="button registration-back" type="button" data-registration-back data-content="registration.backButton">Back</button><button class="button button-gold" type="button" data-registration-complete data-content="registration.completeButton">Complete Registration</button></div>
+        </section>
+        <section class="pass-step success-step" data-pass-step="3" hidden>
+          <div class="success-heading"><span class="success-check">✓</span><h2 data-content="registration.successTitle">Registration Successful!</h2><p data-content="registration.successDescription">Your EcoPass has been prepared. Complete payment through your selected method before entry.</p></div>
+          <div class="digital-pass"><span class="pass-status-chip">REGISTERED</span><img id="passQr" alt="QR code for the newly created EcoPass"><strong>EcoPass Visitor Pass</strong></div>
+          <dl class="pass-details" id="passDetails"></dl>
+          <p class="pass-form-status success" data-pass-status="3" role="status" aria-live="polite"></p>
+          <div class="registration-actions success-actions"><button class="button registration-back" type="button" data-download-pass data-content="registration.downloadButton">Download Pass</button><button class="button button-green" type="button" data-save-pass data-content="registration.saveButton">Save Pass</button></div>
+        </section>
       </form>
     </div>
   </dialog>
