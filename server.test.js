@@ -25,6 +25,14 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.match(html, /data-image="how\.phoneImage"/);
   assert.doesNotMatch(html, /data-image="how\.leavesImage"/);
   assert.match(html, /<dialog class="how-modal" id="how-modal"/);
+  assert.match(html, /<dialog class="pass-modal" id="pass-modal"/);
+  assert.match(html, /data-pass-modal-open/);
+  assert.match(html, /data-content="registration\.guestLabel"/);
+  assert.match(html, /data-content="registration\.arrivalLabel"/);
+  assert.match(html, /data-content="registration\.departureLabel"/);
+  assert.match(html, /data-content="registration\.purposeLabel"/);
+  assert.match(html, /data-content="registration\.emailLabel"/);
+  assert.doesNotMatch(html, /Hotel Accommodation|Booked Rooms|Mode of Travel|Round Trip/);
   assert.doesNotMatch(html, /<section[^>]+id="how"/);
   assert.match(html, /data-image="impact\.backgroundImage"/);
   assert.match(html, /data-image="impact\.emblemImage"/);
@@ -56,6 +64,8 @@ test('public landing page has no upload or inline editing controls', async () =>
   assert.doesNotMatch(adminHtml, /id="storiesEditor"/);
   assert.match(adminHtml, /data-field="support\.address"/);
   assert.match(adminHtml, /data-field="support\.mapEmbedUrl"/);
+  assert.match(adminHtml, /data-field="registration\.title"/);
+  assert.match(adminHtml, /data-field="registration\.purposes\.3"/);
   assert.match(adminHtml, /data-slot="cta\.leavesImage"/);
   assert.match(adminHtml, /data-field="footer\.contactLink"/);
   assert.match(adminHtml, /data-field="footer\.helpLink"/);

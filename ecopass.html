@@ -24,7 +24,7 @@
           <p class="eyebrow" data-content="hero.eyebrow">SMART · SIMPLE · SUSTAINABLE</p>
           <h1><span data-content="hero.titleLine1">Explore responsibly.</span><span data-content="hero.titleLine2">Travel effortlessly.</span></h1>
           <p class="hero-description" data-content="hero.description">Your digital pass to unforgettable destinations—faster entry, less paper, and a lighter footprint.</p>
-          <div class="hero-actions"><a class="button button-gold" href="#cta" data-content="hero.primaryButton">Get Your EcoPass</a><a class="text-link" href="#how-modal" data-how-modal-open><span data-content="hero.secondaryButton">See How It Works</span> <span aria-hidden="true">›</span></a></div>
+          <div class="hero-actions"><a class="button button-gold" href="#pass-modal" data-pass-modal-open data-content="hero.primaryButton">Get Your EcoPass</a><a class="text-link" href="#how-modal" data-how-modal-open><span data-content="hero.secondaryButton">See How It Works</span> <span aria-hidden="true">›</span></a></div>
           <div class="hero-benefits" aria-label="EcoPass benefits"><span><i aria-hidden="true">▦</i><b data-content="hero.benefits.0.label">QR-powered</b></span><span><i aria-hidden="true">♧</i><b data-content="hero.benefits.1.label">Paperless</b></span><span><i aria-hidden="true">♙</i><b data-content="hero.benefits.2.label">Tourist-friendly</b></span></div>
         </div>
         <div class="hero-visual">
@@ -83,7 +83,7 @@
           <img class="cta-leaves cta-leaves-right" data-image="cta.leavesImage" src="ecopass-how-leaves-reference.png" alt="" aria-hidden="true">
         </div>
         <div class="cta-copy"><h2 data-content="cta.title">Ready for your next meaningful journey?</h2><p data-content="cta.description">Get your EcoPass and explore with less waiting, less paper, and more purpose.</p></div>
-        <div class="cta-actions"><a class="button button-gold" data-cta href="mailto:info@ecopass.ph?subject=EcoPass%20registration" data-content="cta.button">Get Your EcoPass</a><a class="button button-outline-light" href="#destinations" data-content="cta.secondaryButton">Browse Destinations</a></div>
+        <div class="cta-actions"><a class="button button-gold" href="#pass-modal" data-pass-modal-open data-content="cta.button">Get Your EcoPass</a><a class="button button-outline-light" href="#destinations" data-content="cta.secondaryButton">Browse Destinations</a></div>
         <img class="cta-phone" data-image="cta.phoneImage" src="ecopass-phone-cutout.png" alt="EcoPass digital visitor pass displayed on a phone">
       </div>
     </section>
@@ -105,8 +105,25 @@
       </div>
     </div>
   </dialog>
+  <dialog class="pass-modal" id="pass-modal" aria-labelledby="pass-modal-title">
+    <div class="pass-modal-card">
+      <button class="pass-modal-close" type="button" aria-label="Close tour details modal"><span aria-hidden="true">×</span></button>
+      <div class="pass-modal-header">
+        <span class="pass-modal-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="38" cy="14" r="7"/><path d="m33 23 10 8 9-5M35 25l-8 13-12-4M27 38l-8 14M34 35l10 17M13 50h13"/><path d="m15 19 8 7-7 10-9-6 8-11Z"/></svg></span>
+        <div><span class="pass-modal-eyebrow" data-content="registration.eyebrow">PLAN YOUR VISIT</span><h2 id="pass-modal-title" data-content="registration.title">Submit Tour Details</h2><p data-content="registration.description">Tell us the essentials for your EcoPass request. We will use these details to help prepare your visit.</p></div>
+      </div>
+      <form class="pass-form" id="passForm">
+        <label class="pass-field"><span data-content="registration.guestLabel">Number of Guests</span><select name="guests" required><option value="1">1 Guest</option><option value="2">2 Guests</option><option value="3">3 Guests</option><option value="4">4 Guests</option><option value="5">5 Guests</option><option value="6">6 Guests</option><option value="7">7 Guests</option><option value="8">8 Guests</option><option value="9">9 Guests</option><option value="10">10 Guests</option></select></label>
+        <fieldset class="pass-schedule"><legend data-content="registration.scheduleLabel">Tour Schedule</legend><label><span data-content="registration.arrivalLabel">Arrival Date</span><input name="arrival" type="date" required></label><label><span data-content="registration.departureLabel">Departure Date</span><input name="departure" type="date" required></label></fieldset>
+        <label class="pass-field"><span data-content="registration.purposeLabel">Purpose of Travel</span><select name="purpose" required><option value="" selected disabled data-content="registration.purposePlaceholder">Select a purpose</option><option data-content="registration.purposes.0">Leisure and vacation</option><option data-content="registration.purposes.1">Business travel</option><option data-content="registration.purposes.2">Visiting family or friends</option><option data-content="registration.purposes.3">Educational or cultural visit</option></select></label>
+        <label class="pass-field pass-email"><span data-content="registration.emailLabel">Valid Email Address</span><input name="email" type="email" autocomplete="email" placeholder="you@example.com" required><small data-content="registration.emailNote">Your email address will be used to send confirmation and pass instructions.</small></label>
+        <p class="pass-form-status" id="passFormStatus" role="status" aria-live="polite"></p>
+        <div class="pass-form-actions"><button class="button pass-cancel" type="button" data-content="registration.cancelButton">Cancel</button><button class="button button-gold" type="submit" data-content="registration.submitButton">Submit Details</button></div>
+      </form>
+    </div>
+  </dialog>
   <footer>
-    <div class="container footer-grid"><div><a class="footer-logo" href="#home"><img data-image="brand.logoImage" src="ecopass-logo-v2.png" alt="EcoPass"></a><p data-content="brand.tagline">Travel lighter.<br>Leave better.</p></div><div><strong data-content="footer.exploreTitle">Explore</strong><a href="#destinations" data-content="footer.destinationsLink">Destinations</a><a href="#how-modal" data-how-modal-open data-content="footer.howLink">How It Works</a><a href="#impact" data-content="footer.aboutLink">About</a></div><div><strong data-content="footer.ecoPassTitle">EcoPass</strong><a href="#cta" data-content="footer.getPassLink">Get Your Pass</a><a href="#home" data-content="footer.benefitsLink">Benefits</a><a href="#support" data-content="footer.supportPageLink">Support</a></div><div><strong data-content="footer.supportTitle">Support</strong><a href="#how-modal" data-how-modal-open data-content="footer.faqsLink">FAQs</a><a href="#support" data-content="footer.contactLink">Contact Us</a><a href="#support" data-content="footer.helpLink">Help Center</a></div><div><strong data-content="footer.followTitle">Follow</strong><div class="socials"><span>f</span><span>◎</span><span>▶</span></div><a data-contact href="mailto:info@ecopass.ph" data-content="brand.contact">info@ecopass.ph</a></div></div>
+    <div class="container footer-grid"><div><a class="footer-logo" href="#home"><img data-image="brand.logoImage" src="ecopass-logo-v2.png" alt="EcoPass"></a><p data-content="brand.tagline">Travel lighter.<br>Leave better.</p></div><div><strong data-content="footer.exploreTitle">Explore</strong><a href="#destinations" data-content="footer.destinationsLink">Destinations</a><a href="#how-modal" data-how-modal-open data-content="footer.howLink">How It Works</a><a href="#impact" data-content="footer.aboutLink">About</a></div><div><strong data-content="footer.ecoPassTitle">EcoPass</strong><a href="#pass-modal" data-pass-modal-open data-content="footer.getPassLink">Get Your Pass</a><a href="#home" data-content="footer.benefitsLink">Benefits</a><a href="#support" data-content="footer.supportPageLink">Support</a></div><div><strong data-content="footer.supportTitle">Support</strong><a href="#how-modal" data-how-modal-open data-content="footer.faqsLink">FAQs</a><a href="#support" data-content="footer.contactLink">Contact Us</a><a href="#support" data-content="footer.helpLink">Help Center</a></div><div><strong data-content="footer.followTitle">Follow</strong><div class="socials"><span>f</span><span>◎</span><span>▶</span></div><a data-contact href="mailto:info@ecopass.ph" data-content="brand.contact">info@ecopass.ph</a></div></div>
     <p class="copyright" data-content="footer.copyright">© 2026 EcoPass. Travel lighter.</p>
   </footer>
   <div class="page-status" role="status" hidden></div>

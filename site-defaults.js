@@ -92,6 +92,22 @@ module.exports = Object.freeze({
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Sipalay+City%2C+Negros+Occidental%2C+Philippines',
     mapEmbedUrl: 'https://www.google.com/maps?q=Sipalay+City%2C+Negros+Occidental%2C+Philippines&output=embed'
   },
+  registration: {
+    eyebrow: 'PLAN YOUR VISIT',
+    title: 'Submit Tour Details',
+    description: 'Tell us the essentials for your EcoPass request. We will use these details to help prepare your visit.',
+    guestLabel: 'Number of Guests',
+    scheduleLabel: 'Tour Schedule',
+    arrivalLabel: 'Arrival Date',
+    departureLabel: 'Departure Date',
+    purposeLabel: 'Purpose of Travel',
+    purposePlaceholder: 'Select a purpose',
+    emailLabel: 'Valid Email Address',
+    emailNote: 'Your email address will be used to send confirmation and pass instructions.',
+    cancelButton: 'Cancel',
+    submitButton: 'Submit Details',
+    purposes: ['Leisure and vacation', 'Business travel', 'Visiting family or friends', 'Educational or cultural visit']
+  },
   cta: {
     title: 'Ready for your next meaningful journey?',
     description: 'Get your EcoPass and explore with less waiting, less paper, and more purpose.',
