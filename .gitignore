@@ -1,5 +1,8 @@
 .env
+node_modules/
 uploads/*
 !uploads/.gitkeep
 data/site-content.json
+data/registrations.json
+data/registration-ids/
 data/*.tmp

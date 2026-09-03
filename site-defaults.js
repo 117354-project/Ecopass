@@ -94,7 +94,7 @@ module.exports = Object.freeze({
   },
   registration: {
     title: 'Tourist Registration',
-    description: 'Ordinance-required visitor details',
+    description: 'A quick, secure registration for your Sipalay adventure',
     fullNameLabel: 'Full Name',
     addressLabel: 'Address',
     contactLabel: 'Contact Number',
@@ -115,7 +115,7 @@ module.exports = Object.freeze({
     backButton: 'Back',
     completeButton: 'Complete Registration',
     successTitle: 'Registration Successful!',
-    successDescription: 'Your EcoPass has been prepared. Complete payment through your selected method before entry.',
+    successDescription: 'Your verified EcoPass is ready. Keep it handy for a smooth arrival and complete payment through your selected method.',
     downloadButton: 'Download Pass',
     saveButton: 'Save Pass',
     paymentMethods: ['GCash', 'Maya', 'Bank Transfer', 'Pay at Tourism Office (Cash)', 'Physical Payment']

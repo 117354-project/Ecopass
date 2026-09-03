@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const fsp = require('node:fs/promises');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const QRCode = require('qrcode');
 const defaults = require('./site-defaults');
 
 const ROOT = __dirname;
@@ -19,12 +20,16 @@ const STORAGE_ROOT = process.env.STORAGE_ROOT ? path.resolve(process.env.STORAGE
 const DATA_DIR = path.join(STORAGE_ROOT, 'data');
 const CONTENT_FILE = path.join(DATA_DIR, 'site-content.json');
 const UPLOAD_DIR = path.join(STORAGE_ROOT, 'uploads');
+const REGISTRATION_FILE = path.join(DATA_DIR, 'registrations.json');
+const PRIVATE_ID_DIR = path.join(DATA_DIR, 'registration-ids');
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const SESSION_SECRET = process.env.SESSION_SECRET || crypto.createHash('sha256').update(`${ROOT}:ecopass-local`).digest('hex');
 const MAX_BODY = 6 * 1024 * 1024;
 const SESSION_TTL = 8 * 60 * 60 * 1000;
 const loginAttempts = new Map();
+const registrationAttempts = new Map();
+let registrationWriteQueue = Promise.resolve();
 
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -32,6 +37,7 @@ const MIME = {
   '.webp': 'image/webp', '.gif': 'image/gif', '.svg': 'image/svg+xml'
 };
 const IMAGE_TYPES = new Map([['image/jpeg', '.jpg'], ['image/png', '.png'], ['image/webp', '.webp'], ['image/gif', '.gif']]);
+const PRIVATE_ID_TYPES = new Map([...IMAGE_TYPES, ['application/pdf', '.pdf']]);
 const IMAGE_SLOTS = new Set(['brand.logoImage', 'brand.faviconImage', 'hero.backgroundImage', 'hero.image', 'how.backgroundImage', 'how.phoneImage', 'how.leavesImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'impact.backgroundImage', 'impact.emblemImage', 'impact.leavesImage', 'journey.image', 'stories.items.0.avatarImage', 'stories.items.1.avatarImage', 'stories.items.2.avatarImage', 'cta.backgroundImage', 'cta.phoneImage', 'cta.leavesImage']);
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
@@ -57,7 +63,9 @@ function sanitizeContent(input) {
 async function ensureStorage() {
   await fsp.mkdir(DATA_DIR, { recursive: true });
   await fsp.mkdir(UPLOAD_DIR, { recursive: true });
+  await fsp.mkdir(PRIVATE_ID_DIR, { recursive: true });
   try { await fsp.access(CONTENT_FILE); } catch { await writeContent({ ...clone(defaults), updatedAt: new Date().toISOString() }); }
+  try { await fsp.access(REGISTRATION_FILE); } catch { await fsp.writeFile(REGISTRATION_FILE, '[]\n', { flag: 'wx' }).catch(() => {}); }
 }
 async function readContent() {
   try { return sanitizeContent(JSON.parse(await fsp.readFile(CONTENT_FILE, 'utf8'))); }
@@ -130,6 +138,45 @@ function matchesImageType(buffer, type) {
   if (type === 'image/webp') return buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP';
   return false;
 }
+function matchesPrivateIdType(buffer, type) {
+  if (type === 'application/pdf') return buffer.subarray(0, 5).toString('ascii') === '%PDF-';
+  return matchesImageType(buffer, type);
+}
+function registrationAllowed(req) {
+  const key = clientKey(req), now = Date.now(), recent = (registrationAttempts.get(key) || []).filter(time => now - time < 60 * 60 * 1000);
+  registrationAttempts.set(key, recent); return recent.length < 20;
+}
+function recordRegistrationAttempt(req) { const key = clientKey(req); registrationAttempts.set(key, [...(registrationAttempts.get(key) || []), Date.now()]); }
+function signIdUpload(payload) { return `${payload}.${sign(`registration-id:${payload}`)}`; }
+function verifyIdUpload(token) {
+  const [payload, signature] = String(token || '').split('.'); if (!payload || !signature) return null;
+  const expected = sign(`registration-id:${payload}`); if (signature.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) return null;
+  try { const value = JSON.parse(Buffer.from(payload, 'base64url').toString()); return value.exp > Date.now() && /^[a-f0-9-]+\.(?:jpg|png|webp|gif|pdf)$/.test(value.file) ? value : null; } catch { return null; }
+}
+async function readRegistrations() { try { const value = JSON.parse(await fsp.readFile(REGISTRATION_FILE, 'utf8')); return Array.isArray(value) ? value : []; } catch { return []; } }
+async function appendRegistration(record) {
+  registrationWriteQueue = registrationWriteQueue.then(async () => { const records = await readRegistrations(); records.push(record); const temp = `${REGISTRATION_FILE}.${process.pid}.tmp`; await fsp.writeFile(temp, JSON.stringify(records, null, 2)); await fsp.rename(temp, REGISTRATION_FILE); });
+  await registrationWriteQueue;
+}
+function cleanRegistration(input) {
+  const counts = Object.fromEntries(['adult', 'foreign', 'senior', 'child'].map(key => [key, Math.max(key === 'adult' ? 1 : 0, Math.min(50, Number.parseInt(input?.groups?.[key], 10) || 0))]));
+  const stays = ['1D / 0N','2D / 1N','3D / 2N','4D / 3N','5D / 4N','6D / 5N','7D / 6N'];
+  const methods = ['GCash','Maya','Bank Transfer','Pay at Tourism Office (Cash)','Physical Payment'];
+  const date = String(input?.visitDate || ''); const parsedDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? new Date(`${date}T00:00:00Z`) : null;
+  const today = new Date(); today.setUTCHours(0,0,0,0);
+  const value = { fullName: cleanText(input?.fullName, 100), address: cleanText(input?.address, 180), contact: cleanText(input?.contact, 30), visitDate: date, stay: stays.includes(input?.stay) ? input.stay : '', groups: counts, paymentMethod: methods.includes(input?.paymentMethod) ? input.paymentMethod : '', idToken: cleanText(input?.idToken, 1000) };
+  if (value.fullName.length < 2 || value.address.length < 5 || !/^[+\d][\d\s()-]{6,29}$/.test(value.contact) || !parsedDate || parsedDate < today || !value.stay || !value.paymentMethod) throw Object.assign(new Error('Please provide complete and valid registration details.'), { status: 400 });
+  const idUpload = counts.senior > 0 ? verifyIdUpload(value.idToken) : null; if (counts.senior > 0 && !idUpload) throw Object.assign(new Error('A valid ID upload is required for discounted visitors.'), { status: 400 });
+  const amount = counts.adult * 50 + counts.foreign * 100 + counts.senior * 25;
+  const days = Number.parseInt(value.stay, 10); const validUntil = new Date(parsedDate); validUntil.setUTCDate(validUntil.getUTCDate() + days - 1);
+  return { ...value, idFile: idUpload?.file || null, amount, validUntil: validUntil.toISOString().slice(0, 10) };
+}
+function publicPass(record) { return { id: record.id, fullName: record.fullName, visitDate: record.visitDate, stay: record.stay, validUntil: record.validUntil, groups: record.groups, amount: record.amount, paymentMethod: record.paymentMethod, paymentStatus: record.paymentStatus, status: record.status, createdAt: record.createdAt }; }
+function html(res, status, markup) { res.writeHead(status, { 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': Buffer.byteLength(markup), 'Cache-Control': 'no-store' }); res.end(markup); }
+function escapeHtml(value) { return String(value).replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]); }
+function verificationPage(record) {
+  if (!record) return '<!doctype html><meta name="viewport" content="width=device-width"><title>EcoPass not found</title><style>body{font:16px Arial;display:grid;place-items:center;min-height:100vh;margin:0;background:#f5f1e8;color:#173b28}.card{max-width:420px;padding:32px;border-radius:22px;background:#fff;text-align:center;box-shadow:0 20px 50px #0002}a{color:#075d34}</style><main class="card"><h1>Pass not found</h1><p>This EcoPass ID could not be verified.</p><a href="/">Return to EcoPass</a></main>';
+  const pass = publicPass(record); return `<!doctype html><meta name="viewport" content="width=device-width"><title>Verified EcoPass ${escapeHtml(pass.id)}</title><style>body{font:15px Arial;display:grid;place-items:center;min-height:100vh;margin:0;padding:20px;background:#f5f1e8;color:#173b28}.card{width:min(430px,100%);box-sizing:border-box;padding:30px;border-radius:24px;background:#fff;box-shadow:0 20px 55px #0002}.check{display:grid;width:58px;height:58px;margin:auto;border-radius:50%;background:#e5f5e8;color:#075d34;font-size:30px;place-items:center}h1{text-align:center;color:#075d34}.status{text-align:center;color:#4f6659}.row{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #eee}.row span{color:#77877e}.demo{margin-top:18px;padding:11px;border-radius:10px;background:#fff5d9;color:#745b19;font-size:12px;text-align:center}a{display:block;margin-top:20px;color:#075d34;text-align:center}</style><main class="card"><div class="check">✓</div><h1>Verified EcoPass</h1><p class="status">Active registration record</p><div class="row"><span>Pass ID</span><b>${escapeHtml(pass.id)}</b></div><div class="row"><span>Visitor</span><b>${escapeHtml(pass.fullName)}</b></div><div class="row"><span>Visit date</span><b>${escapeHtml(pass.visitDate)}</b></div><div class="row"><span>Valid until</span><b>${escapeHtml(pass.validUntil)}</b></div><div class="row"><span>Amount</span><b>₱${pass.amount.toFixed(2)}</b></div><div class="demo">Payment is in demonstration mode and has not been charged.</div><a href="/">Return to EcoPass</a></main>`; }
 async function serveFile(res, file, cache = false) {
   try {
     const stat = await fsp.stat(file); if (!stat.isFile()) throw new Error('Not file');
@@ -142,6 +189,31 @@ async function handler(req, res) {
   try {
     if (url.pathname === '/api/content' && req.method === 'GET') return json(res, 200, await readContent());
     if (url.pathname === '/health' && req.method === 'GET') return json(res, 200, { status: 'ok', adminConfigured: Boolean(ADMIN_PASSWORD) });
+    if (url.pathname === '/api/registration-id' && req.method === 'POST') {
+      if (!sameOrigin(req)) return json(res, 403, { error: 'Invalid request origin' });
+      if (!registrationAllowed(req)) return json(res, 429, { error: 'Too many registration attempts. Please try again later.' });
+      const type = String(req.headers['content-type'] || '').split(';')[0]; if (!PRIVATE_ID_TYPES.has(type)) return json(res, 415, { error: 'Use a JPG, PNG, WebP, GIF, or PDF identification file.' });
+      const file = await body(req, 5 * 1024 * 1024); if (file.length < 16 || !matchesPrivateIdType(file, type)) return json(res, 415, { error: 'The identification file is empty or invalid.' });
+      const filename = `${crypto.randomUUID()}${PRIVATE_ID_TYPES.get(type)}`; await fsp.writeFile(path.join(PRIVATE_ID_DIR, filename), file, { flag: 'wx' });
+      const payload = Buffer.from(JSON.stringify({ file: filename, exp: Date.now() + 60 * 60 * 1000 })).toString('base64url');
+      return json(res, 201, { token: signIdUpload(payload) });
+    }
+    if (url.pathname === '/api/registrations' && req.method === 'POST') {
+      if (!sameOrigin(req)) return json(res, 403, { error: 'Invalid request origin' });
+      if (!registrationAllowed(req)) return json(res, 429, { error: 'Too many registration attempts. Please try again later.' });
+      const input = cleanRegistration(await jsonBody(req)); recordRegistrationAttempt(req);
+      const record = { ...input, id: `ECP-${input.visitDate.replaceAll('-', '')}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`, paymentStatus: 'DEMO_ONLY', status: 'ACTIVE', createdAt: new Date().toISOString() };
+      delete record.idToken; await appendRegistration(record);
+      const protocol = String(req.headers['x-forwarded-proto'] || '').split(',')[0] || 'http'; const origin = `${protocol}://${req.headers.host}`; const verifyUrl = `${origin}/verify/${encodeURIComponent(record.id)}`;
+      const qrDataUrl = await QRCode.toDataURL(verifyUrl, { width: 300, margin: 2, color: { dark: '#075d34', light: '#ffffff' }, errorCorrectionLevel: 'M' });
+      return json(res, 201, { pass: publicPass(record), verifyUrl, qrDataUrl });
+    }
+    if (url.pathname.startsWith('/api/passes/') && req.method === 'GET') {
+      const id = decodeURIComponent(url.pathname.slice('/api/passes/'.length)); const record = (await readRegistrations()).find(item => item.id === id); return record ? json(res, 200, publicPass(record)) : json(res, 404, { error: 'Pass not found' });
+    }
+    if (url.pathname.startsWith('/verify/') && req.method === 'GET') {
+      const id = decodeURIComponent(url.pathname.slice('/verify/'.length)); const record = (await readRegistrations()).find(item => item.id === id); return html(res, record ? 200 : 404, verificationPage(record));
+    }
     if (url.pathname === '/api/admin/session' && req.method === 'GET') return json(res, 200, { authenticated: authenticated(req) });
     if (url.pathname === '/api/admin/login' && req.method === 'POST') {
       if (!sameOrigin(req)) return json(res, 403, { error: 'Invalid request origin' });
@@ -155,6 +227,7 @@ async function handler(req, res) {
     }
     if (url.pathname === '/api/admin/logout' && req.method === 'POST') return json(res, 200, { ok: true }, { 'Set-Cookie': 'ecopass_admin=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0' });
     if (url.pathname.startsWith('/api/admin/') && (!authenticated(req) || !sameOrigin(req))) return json(res, 401, { error: 'Authentication required' });
+    if (url.pathname === '/api/admin/registrations' && req.method === 'GET') return json(res, 200, await readRegistrations());
     if (url.pathname === '/api/admin/content' && req.method === 'PUT') return json(res, 200, await writeContent(await jsonBody(req)));
     if (url.pathname === '/api/admin/upload' && req.method === 'POST') {
       const slot = url.searchParams.get('slot');

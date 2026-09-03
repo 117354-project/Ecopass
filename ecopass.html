@@ -111,7 +111,7 @@
       <div class="pass-progress" aria-label="Registration progress"><span class="active" data-pass-progress="1">1</span><i></i><span data-pass-progress="2">2</span><i></i><span data-pass-progress="3">3</span></div>
       <form class="registration-form" id="passForm">
         <section class="pass-step registration-step" data-pass-step="1">
-          <div class="registration-heading"><span class="registration-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="38" cy="14" r="7"/><path d="m33 23 10 8 9-5M35 25l-8 13-12-4M27 38l-8 14M34 35l10 17M13 50h13"/><path d="m15 19 8 7-7 10-9-6 8-11Z"/></svg></span><div><h2 id="pass-modal-title" data-content="registration.title">Tourist Registration</h2><p data-content="registration.description">Ordinance-required visitor details</p></div></div>
+          <div class="registration-heading"><span class="registration-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="38" cy="14" r="7"/><path d="m33 23 10 8 9-5M35 25l-8 13-12-4M27 38l-8 14M34 35l10 17M13 50h13"/><path d="m15 19 8 7-7 10-9-6 8-11Z"/></svg></span><div><h2 id="pass-modal-title" data-content="registration.title">Tourist Registration</h2><p data-content="registration.description">A quick, secure registration for your Sipalay adventure</p></div></div>
           <div class="registration-grid">
             <label class="registration-field wide"><span data-content="registration.fullNameLabel">Full Name</span><input name="fullName" autocomplete="name" placeholder="Juan Dela Cruz" required></label>
             <label class="registration-field wide"><span data-content="registration.addressLabel">Address</span><input name="address" autocomplete="street-address" placeholder="Purok, Barangay, City" required></label>
@@ -142,10 +142,11 @@
             <label><span class="payment-badge physical">▣</span><span data-content="registration.paymentMethods.4">Physical Payment</span><input type="radio" name="paymentMethod" value="Physical Payment"></label>
           </div>
           <p class="payment-notice" data-content="registration.paymentNotice">Your selected payment method will be recorded. No charge is made on this demonstration site.</p>
+          <p class="pass-form-status" data-pass-status="2" role="alert"></p>
           <div class="registration-actions"><button class="button registration-back" type="button" data-registration-back data-content="registration.backButton">Back</button><button class="button button-gold" type="button" data-registration-complete data-content="registration.completeButton">Complete Registration</button></div>
         </section>
         <section class="pass-step success-step" data-pass-step="3" hidden>
-          <div class="success-heading"><span class="success-check">✓</span><h2 data-content="registration.successTitle">Registration Successful!</h2><p data-content="registration.successDescription">Your EcoPass has been prepared. Complete payment through your selected method before entry.</p></div>
+          <div class="success-heading"><span class="success-check">✓</span><h2 data-content="registration.successTitle">Registration Successful!</h2><p data-content="registration.successDescription">Your verified EcoPass is ready. Keep it handy for a smooth arrival and complete payment through your selected method.</p></div>
           <div class="digital-pass"><span class="pass-status-chip">REGISTERED</span><img id="passQr" alt="QR code for the newly created EcoPass"><strong>EcoPass Visitor Pass</strong></div>
           <dl class="pass-details" id="passDetails"></dl>
           <p class="pass-form-status success" data-pass-status="3" role="status" aria-live="polite"></p>

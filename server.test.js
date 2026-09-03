@@ -67,6 +67,7 @@ test('public landing page has no inline editing controls and only the required v
   assert.match(adminHtml, /data-field="support\.mapEmbedUrl"/);
   assert.match(adminHtml, /data-field="registration\.title"/);
   assert.match(adminHtml, /data-field="registration\.paymentMethods\.4"/);
+  assert.match(adminHtml, /id="registrationsList"/);
   assert.match(adminHtml, /data-slot="cta\.leavesImage"/);
   assert.match(adminHtml, /data-field="footer\.contactLink"/);
   assert.match(adminHtml, /data-field="footer\.helpLink"/);
@@ -97,12 +98,16 @@ test('content sanitizer keeps the schema and strips control characters', () => {
 
 test('server protects writes and persists authenticated content updates', async t => {
   const contentFile = path.join(__dirname, 'data', 'site-content.json');
+  const registrationFile = path.join(__dirname, 'data', 'registrations.json');
   let original = null;
+  let originalRegistrations = null;
   try { original = await fs.readFile(contentFile); } catch {}
+  try { originalRegistrations = await fs.readFile(registrationFile); } catch {}
   const server = await start(0);
   t.after(async () => {
     await new Promise(resolve => server.close(resolve));
     if (original) await fs.writeFile(contentFile, original); else await fs.rm(contentFile, { force: true });
+    if (originalRegistrations) await fs.writeFile(registrationFile, originalRegistrations); else await fs.rm(registrationFile, { force: true });
   });
   const base = `http://127.0.0.1:${server.address().port}`;
   const publicResponse = await fetch(`${base}/api/content`);
@@ -111,6 +116,18 @@ test('server protects writes and persists authenticated content updates', async 
   const health = await (await fetch(`${base}/health`)).json();
   assert.equal(health.status, 'ok');
   assert.equal(health.adminConfigured, true);
+  const registration = await fetch(`${base}/api/registrations`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fullName: 'Test Tourist', address: 'Sipalay City, Philippines', contact: '0917 000 0000', visitDate: '2099-10-10', stay: '3D / 2N', groups: { adult: 2, foreign: 0, senior: 0, child: 1 }, paymentMethod: 'GCash' }) });
+  assert.equal(registration.status, 201);
+  const registrationResult = await registration.json();
+  assert.match(registrationResult.pass.id, /^ECP-20991010-[A-F0-9]{8}$/);
+  assert.equal(registrationResult.pass.amount, 100);
+  assert.equal(registrationResult.pass.paymentStatus, 'DEMO_ONLY');
+  assert.match(registrationResult.qrDataUrl, /^data:image\/png;base64,/);
+  const verifiedPass = await (await fetch(`${base}/api/passes/${registrationResult.pass.id}`)).json();
+  assert.equal(verifiedPass.fullName, 'Test Tourist');
+  const verificationPage = await fetch(`${base}/verify/${registrationResult.pass.id}`);
+  assert.equal(verificationPage.status, 200);
+  assert.match(await verificationPage.text(), /Verified EcoPass/);
 
   const denied = await fetch(`${base}/api/admin/content`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(current) });
   assert.equal(denied.status, 401);
@@ -118,6 +135,9 @@ test('server protects writes and persists authenticated content updates', async 
   const login = await fetch(`${base}/api/admin/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: 'test-only-admin-password' }) });
   assert.equal(login.status, 200);
   const cookie = login.headers.get('set-cookie').split(';')[0];
+  const adminRegistrations = await fetch(`${base}/api/admin/registrations`, { headers: { Cookie: cookie } });
+  assert.equal(adminRegistrations.status, 200);
+  assert.equal((await adminRegistrations.json())[0].id, registrationResult.pass.id);
   const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
   const backgroundUpload = await fetch(`${base}/api/admin/upload?slot=how.backgroundImage`, { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: cookie }, body: tinyPng });
   assert.equal(backgroundUpload.status, 201);
