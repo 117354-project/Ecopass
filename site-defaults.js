@@ -17,9 +17,9 @@ module.exports = Object.freeze({
     primaryButton: 'Get Your EcoPass',
     secondaryButton: 'See How It Works',
     benefits: [
-      { label: 'QR-powered' },
-      { label: 'Paperless' },
-      { label: 'Tourist-friendly' }
+      { label: 'QR-powered', iconImage: '/ecopass-benefit-qr.svg' },
+      { label: 'Paperless', iconImage: '/ecopass-benefit-paperless.svg' },
+      { label: 'Tourist-friendly', iconImage: '/ecopass-benefit-tourist.svg' }
     ],
     backgroundImage: '/ecopass-cream-texture.png',
     image: '/ecopass-hero-upload-transparent.png'
@@ -31,9 +31,9 @@ module.exports = Object.freeze({
     phoneImage: '/ecopass-phone-cutout.png',
     leavesImage: '/ecopass-how-leaves-reference.png',
     steps: [
-      { number: '01', title: 'Choose a destination', description: 'Browse places, learn about entry requirements, and plan your visit.' },
-      { number: '02', title: 'Get your digital pass', description: 'Purchase your pass in minutes and receive it instantly on your phone.' },
-      { number: '03', title: 'Scan and explore', description: 'Present your QR code for quick entry and enjoy your journey responsibly.' }
+      { number: '01', title: 'Choose a destination', description: 'Browse places, learn about entry requirements, and plan your visit.', iconImage: '/ecopass-step-destination.svg' },
+      { number: '02', title: 'Get your digital pass', description: 'Purchase your pass in minutes and receive it instantly on your phone.', iconImage: '/ecopass-step-phone.svg' },
+      { number: '03', title: 'Scan and explore', description: 'Present your QR code for quick entry and enjoy your journey responsibly.', iconImage: '/ecopass-step-scan.svg' }
     ]
   },
   destinations: {

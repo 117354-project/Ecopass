@@ -38,7 +38,7 @@ const MIME = {
 };
 const IMAGE_TYPES = new Map([['image/jpeg', '.jpg'], ['image/png', '.png'], ['image/webp', '.webp'], ['image/gif', '.gif']]);
 const PRIVATE_ID_TYPES = new Map([...IMAGE_TYPES, ['application/pdf', '.pdf']]);
-const IMAGE_SLOTS = new Set(['brand.logoImage', 'brand.faviconImage', 'hero.backgroundImage', 'hero.image', 'how.backgroundImage', 'how.phoneImage', 'how.leavesImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'impact.backgroundImage', 'impact.emblemImage', 'impact.leavesImage', 'journey.image', 'stories.items.0.avatarImage', 'stories.items.1.avatarImage', 'stories.items.2.avatarImage', 'cta.backgroundImage', 'cta.phoneImage', 'cta.leavesImage']);
+const IMAGE_SLOTS = new Set(['brand.logoImage', 'brand.faviconImage', 'hero.backgroundImage', 'hero.image', 'hero.benefits.0.iconImage', 'hero.benefits.1.iconImage', 'hero.benefits.2.iconImage', 'how.backgroundImage', 'how.phoneImage', 'how.leavesImage', 'how.steps.0.iconImage', 'how.steps.1.iconImage', 'how.steps.2.iconImage', 'destinations.items.0.image', 'destinations.items.1.image', 'destinations.items.2.image', 'impact.backgroundImage', 'impact.emblemImage', 'impact.leavesImage', 'journey.image', 'stories.items.0.avatarImage', 'stories.items.1.avatarImage', 'stories.items.2.avatarImage', 'cta.backgroundImage', 'cta.phoneImage', 'cta.leavesImage']);
 
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 function merge(base, input) {
